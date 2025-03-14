@@ -6,5 +6,8 @@ export default {
         './app/Filament/Jhp/**/*.php',
         './resources/views/filament/jhp/**/*.blade.php',
         './vendor/filament/**/*.blade.php',
+        './vendor/awcodes/filament-table-repeater/resources/**/*.blade.php',
+        './vendor/guava/filament-modal-relation-managers/resources/**/*.blade.php',
+        './vendor/archilex/filament-toggle-icon-column/**/*.php',
     ],
 }

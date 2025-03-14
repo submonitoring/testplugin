@@ -11,17 +11,19 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
-use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Jetstream\HasTeams;
 use Laravel\Sanctum\HasApiTokens;
 use Filament\Panel;
 use Filament\Models\Contracts\FilamentUser;
 use Illuminate\Database\Eloquent\Model;
+use Jeffgreco13\FilamentBreezy\Traits\TwoFactorAuthenticatable as TraitsTwoFactorAuthenticatable;
 use Kenepa\ResourceLock\Models\Concerns\HasLocks;
 use Request;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Permission\Traits\HasRoles;
+use TomatoPHP\FilamentAlerts\Traits\InteractsWithNotifications;
+use TomatoPHP\FilamentSocial\Traits\InteractsWithSocials;
 use Wildside\Userstamps\Userstamps;
 
 /**
@@ -39,7 +41,6 @@ use Wildside\Userstamps\Userstamps;
  * @property string|null $two_factor_confirmed_at
  * @property string|null $remember_token
  * @property int|null $current_team_id
- * @property string|null $profile_photo_path
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Team|null $currentTeam
@@ -87,11 +88,11 @@ class User extends Authenticatable implements FilamentUser
 {
     use HasApiTokens;
     use HasFactory;
-    use HasProfilePhoto;
-    use HasTeams;
     use Notifiable;
-    use TwoFactorAuthenticatable;
+    use TraitsTwoFactorAuthenticatable;
     use HasRoles;
+    use InteractsWithNotifications;
+    use InteractsWithSocials;
 
     public function canAccessPanel(Panel $panel): bool
     {
@@ -135,15 +136,6 @@ class User extends Authenticatable implements FilamentUser
     ];
 
     /**
-     * The accessors to append to the model's array form.
-     *
-     * @var array<int, string>
-     */
-    protected $appends = [
-        'profile_photo_url',
-    ];
-
-    /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>
@@ -169,7 +161,7 @@ class User extends Authenticatable implements FilamentUser
 
     public function getRedirectRoute(): string
     {
-        return match ((int)$this->panel_role_id) {
+        return match ((int)$this->panel) {
             1 => 'submonitoring',
             2 => 'jhpadmin',
             3 => 'jhp'

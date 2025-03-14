@@ -12,16 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->json('canviewany_id');
-            $table->json('cancreate_id');
-            $table->json('canupdate_id');
-            $table->json('canview_id');
-            $table->json('candelete_id');
-            $table->json('canforcedelete_id');
-            $table->json('canforcedeleteany_id');
-            $table->json('canrestore_id');
-            $table->json('canrestoreany_id');
-            $table->json('canreorder_id');
+            $table->json('canviewany_id')->nullable();
+            $table->json('cancreate_id')->nullable();
+            $table->json('canupdate_id')->nullable();
+            $table->json('canview_id')->nullable();
+            $table->json('candelete_id')->nullable();
+            $table->json('canforcedelete_id')->nullable();
+            $table->json('canforcedeleteany_id')->nullable();
+            $table->json('canrestore_id')->nullable();
+            $table->json('canrestoreany_id')->nullable();
+            $table->json('canreorder_id')->nullable();
         });
     }
 };
